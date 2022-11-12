@@ -29,11 +29,16 @@ app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("this is the app home page");
+});
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/hotels", hotelsRoute);
 app.use("/api/rooms", roomsRoute);
-
+app.all("*", (req,res) => {
+  res.send('page not found')
+})
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
@@ -45,9 +50,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.get("/", (req, res) => {
-  res.send("this is the app home page");
-});
+
 app.listen(process.env.PORT || 8800, () => {
   connect();
   console.log("Connected to backend.");
